@@ -2,7 +2,8 @@
 
 **Copy, Tag, Link source material into portable semantic HTML packages.**
 
-RAG chunks. Markdown flattens. CTL preserves.
+RAG gives you chunks. Markdown gives you text. CTL gives you reusable,
+traceable parts.
 
 ![CTL package flow](docs/assets/ctl-package-flow.svg)
 

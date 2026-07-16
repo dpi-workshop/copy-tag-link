@@ -237,6 +237,7 @@ opening issues or pull requests.
 
 - [Why CTL-Core](docs/why-ctl.md)
 - [CTL package anatomy](docs/output-package.md)
+- [Using CTL packages with agents](docs/agent-use.md)
 - [Demos](docs/demos.md)
 - [Adapter guide](docs/adapters.md)
 - [Release checklist](docs/release-checklist.md)

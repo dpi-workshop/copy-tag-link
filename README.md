@@ -240,6 +240,7 @@ opening issues or pull requests.
 - [Using CTL packages with agents](docs/agent-use.md)
 - [Demos](docs/demos.md)
 - [Adapter guide](docs/adapters.md)
+- [Roadmap](docs/roadmap.md)
 - [Release checklist](docs/release-checklist.md)
 
 ## License

@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="260" viewBox="0 0 720 260" role="img" aria-labelledby="title desc">
+  <title id="title">CTL demo flow</title>
+  <desc id="desc">A generated diagram showing source files becoming semantic HTML, reusable assets, and OKF cards.</desc>
+  <rect width="720" height="260" fill="#f7f7f5"/>
+  <g font-family="Arial, sans-serif" font-size="20" fill="#202020">
+    <rect x="30" y="70" width="160" height="90" fill="#ffffff" stroke="#1f5eff" stroke-width="3"/>
+    <text x="68" y="112">Source</text>
+    <text x="70" y="140">Files</text>
+    <path d="M210 115 H300" stroke="#202020" stroke-width="4" marker-end="url(#arrow)"/>
+    <rect x="320" y="35" width="170" height="55" fill="#ffffff" stroke="#2f8f46" stroke-width="3"/>
+    <text x="355" y="70">HTML</text>
+    <rect x="320" y="105" width="170" height="55" fill="#ffffff" stroke="#e07822" stroke-width="3"/>
+    <text x="355" y="140">Assets</text>
+    <rect x="320" y="175" width="170" height="55" fill="#ffffff" stroke="#7b4ed9" stroke-width="3"/>
+    <text x="365" y="210">OKF</text>
+    <path d="M510 62 H610" stroke="#202020" stroke-width="4" marker-end="url(#arrow)"/>
+    <path d="M510 132 H610" stroke="#202020" stroke-width="4" marker-end="url(#arrow)"/>
+    <path d="M510 202 H610" stroke="#202020" stroke-width="4" marker-end="url(#arrow)"/>
+    <text x="620" y="126" font-size="18">Index any way</text>
+    <text x="620" y="150" font-size="18">you want</text>
+  </g>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#202020"/>
+    </marker>
+  </defs>
+</svg>

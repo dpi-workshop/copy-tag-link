@@ -1,0 +1,246 @@
+# CTL-Core
+
+**Copy, Tag, Link source material into portable semantic HTML packages.**
+
+RAG chunks. Markdown flattens. CTL preserves.
+
+CTL-Core is a file-first, database-optional ingestion layer for AI agents,
+RAG systems, wiki workflows, research archives, classroom materials, and
+publishing pipelines. It keeps the original source, copies reusable parts,
+tags provenance and structure, links everything into plain semantic HTML, and
+emits search indexes plus OKF-compatible Markdown cards.
+
+The package can be opened as a static website, read as a human archive, or
+indexed by SQL, graph, vector, and agent workflows. The HTML remains useful
+even when the database changes, disappears, or gets rebuilt.
+
+The goal is simple:
+
+```text
+Your knowledge survives the tools.
+```
+
+## Why File-First?
+
+CTL-Core is designed to avoid vendor lock-in. The durable memory layer is not a
+model account, SaaS dashboard, vector database, or cloud bucket. It is an
+ordinary folder of source files, assets, semantic HTML, JSON indexes, and
+OKF-compatible cards.
+
+That folder can be copied, zipped, backed up, hosted as static files, synced to
+cloud storage, indexed by different databases, or handed to different AI agents.
+If a vendor disappears, a database is wiped, or a server fails, the CTL package
+still contains the human-readable source, provenance, and rebuildable indexes.
+
+For multi-agent workflows, CTL-Core can act as shared memory that OpenAI,
+Gemini, Claude, local models, human reviewers, and future tools can all read
+without needing the same database or platform.
+
+## What CTL-Core Produces
+
+A CTL package is a folder you can open, zip, back up, publish as static files,
+or index with whatever database you prefer.
+
+```text
+package/
+  assets/
+    original/       original source files
+    images/         copied/extracted image assets
+    tables/         canonical CTL records
+  documents/        plain semantic HTML review pages
+  manifests/        provenance and source metadata
+  okf/              OKF-compatible Markdown cards
+  intermediate/     adapter-specific raw outputs
+  manifest.json
+  search.json
+```
+
+Databases are optional acceleration layers. The CTL package remains the source
+of truth.
+
+## Quick Start
+
+This first public slice uses only the Python standard library and a generated
+HTML sample.
+
+```shell
+python scripts/ctl_parser_lab.py samples/simple-source/market-snapshot.html -o output/demo-market-snapshot
+```
+
+Then open:
+
+```text
+output/demo-market-snapshot/documents/parser-lab-report.html
+```
+
+You should also see:
+
+```text
+output/demo-market-snapshot/manifest.json
+output/demo-market-snapshot/manifests/provenance.json
+output/demo-market-snapshot/search.json
+output/demo-market-snapshot/assets/tables/ctl-records.json
+output/demo-market-snapshot/okf/index.md
+```
+
+## PDF Demo
+
+The stronger demo starts with a styled PDF and produces a plain CTL package
+with:
+
+- the original PDF preserved
+- table text converted to semantic HTML `<table>`
+- table, diagram, and embedded image crops saved as reusable assets
+- provenance, search JSON, CTL records, and OKF-compatible cards
+
+Install optional demo dependencies:
+
+```shell
+python -m pip install -r requirements-demo.txt
+```
+
+Regenerate the styled sample PDF:
+
+```shell
+python scripts/build_demo_pdf.py
+```
+
+Parse it into a CTL package:
+
+```shell
+python scripts/ctl_parser_lab.py samples/simple-source/market-snapshot.pdf -o output/demo-market-snapshot-pdf
+```
+
+Then open:
+
+```text
+output/demo-market-snapshot-pdf/documents/parser-lab-report.html
+```
+
+## Pre-Push Safety Check
+
+Before publishing or pushing changes, run the local release scanner:
+
+```shell
+scripts/scan_secrets.cmd
+```
+
+The wrapper runs CTL's small safety scan plus gitleaks and TruffleHog when they
+are installed. It can use scanners from `PATH`, from `CTL_SECURITY_SCANNERS`, or
+from a workspace-local `tools/security-scanners` folder.
+
+Run smoke tests:
+
+```shell
+python scripts/run_smoke_tests.py
+```
+
+Optional network and PDF checks:
+
+```shell
+python scripts/run_smoke_tests.py --network --pdf
+```
+
+## Why HTML First?
+
+HTML can represent headings, sections, links, tables, figures, captions,
+metadata, and reusable assets without requiring a database.
+
+CTL-Core uses semantic HTML as the durable working layer, then emits replaceable
+indexes for search, SQL, vector stores, graph stores, or OKF-compatible
+catalogues.
+
+## Relationship To OKF
+
+Google's Open Knowledge Format is Markdown/YAML oriented. CTL-Core treats OKF
+as a card catalogue and exchange layer:
+
+```text
+semantic HTML + assets = rich source package
+OKF Markdown cards     = portable catalogue/index
+```
+
+The OKF cards point back to the richer CTL HTML, records, and assets.
+
+## Adapter Philosophy
+
+CTL-Core defines the output contract. Adapters compete to produce good CTL
+packages.
+
+Parser adapters are kept away from database adapters, social inputs, cloud
+sync, and agent workflows. A parser adapter reads a local source file and writes
+CTL package files. Nothing more.
+
+The built-in adapters are intentionally small:
+
+- `fileinfo`
+- `basic-html`
+- `basic-json`
+- `basic-text`
+- `basic-pdf` when `pdfplumber` or `pypdf` is installed
+- `codebase` for source trees, file records, symbol records, and simple graphs
+- `source-intake` for conservative public RSS, website, GitHub, YouTube
+  metadata, and Reddit public JSON intake
+
+Heavy parsers such as Docling, MinerU, PaddleOCR, Pandoc, and Playwright should
+be optional adapters. Users can install only the tools they need.
+
+Cloud storage bridges such as rclone and AList are also optional adapters, not
+dependencies. They can help move or browse CTL packages across cloud providers,
+but CTL packages remain ordinary folders that work without them.
+
+Agent handoffs should be provider-neutral contracts. Gemini, OpenAI,
+OpenRouter, Claude, local models, or human workers can all execute the same job
+packet through different bridges.
+
+## Source Intake Demo
+
+Public source intake can create CTL packages from RSS/Atom feeds, static web
+pages, public GitHub repo metadata, YouTube feed/video metadata, or Reddit
+public JSON. Social sources should be treated as unverified signal unless
+checked against stronger sources.
+
+```shell
+python scripts/ctl_source_intake.py https://github.com/dpi-workshop/ctl-core -o output/github-demo
+python scripts/ctl_source_intake.py r/python -o output/reddit-python --kind reddit --limit 10
+```
+
+The adapter registry lives at
+`ctl_core/adapters/registry.json`. It is intended to let a CLI or dashboard show
+what CTL supports, what is installed, what is enabled, and what still needs
+review.
+
+## What CTL-Core Is Not
+
+CTL-Core is not:
+
+- a vector database
+- a graph database
+- a SaaS dashboard
+- a model wrapper
+- a replacement for specialist parsers
+
+CTL-Core is the portable document/data layer underneath those tools.
+
+## Status
+
+Early MVP. The current goal is to prove the shape:
+
+```text
+source in -> CTL package out -> open in browser -> index however you want
+```
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) and [SECURITY.md](SECURITY.md) before
+opening issues or pull requests.
+
+## Documentation
+
+- [Why CTL-Core](docs/why-ctl.md)
+- [CTL package anatomy](docs/output-package.md)
+- [Demos](docs/demos.md)
+- [Adapter guide](docs/adapters.md)
+- [Release checklist](docs/release-checklist.md)
+
+## License
+
+Apache-2.0. Maintained by Dean Khong.

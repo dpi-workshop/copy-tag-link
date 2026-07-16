@@ -1,0 +1,28 @@
+name: CTL-Core CI
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run local safety scan
+        run: python scripts/check_release_safety.py .
+
+      - name: Run smoke tests
+        run: python scripts/run_smoke_tests.py

@@ -16,30 +16,41 @@ The first public release proves the basic shape:
 - emit `assets/tables/ctl-records.json`
 - emit `manifests/provenance.json`
 - emit OKF-compatible Markdown cards
+- provide initial `python -m ctl_core inspect`, `validate`, and `search`
+  commands
+- validate generated CTL packages in smoke tests
 - run smoke tests and release safety checks
 - document how agents should read CTL packages
 
-## Next: CLI
+## Next: CLI Polish
 
-Add a small command-line interface over the current scripts.
+The first public CLI is available through `python -m ctl_core`. The next step
+is to polish it into a friendlier standalone command and add ingestion/export
+wrappers.
 
-Planned commands:
+Current commands:
+
+```text
+python -m ctl_core inspect PACKAGE
+python -m ctl_core validate PACKAGE
+python -m ctl_core search PACKAGE QUERY
+```
+
+Planned additions:
 
 ```text
 ctl ingest SOURCE -o PACKAGE
-ctl inspect PACKAGE
-ctl validate PACKAGE
 ctl export-okf PACKAGE
-ctl search PACKAGE QUERY
 ```
 
 The CLI should remain thin. It should wrap the same package layout instead of
 creating a new hidden data model.
 
-## Next: Package Validation
+## Next: Package Validation Hardening
 
-Add a validator that checks whether a CTL package contains the expected files,
-valid JSON, usable record ids, source references, and provenance.
+The initial validator checks required files, valid JSON, usable record ids,
+source references, provenance, and search coverage. The next step is to harden
+validation across more adapter families and malformed packages.
 
 Validation should answer:
 
@@ -52,7 +63,8 @@ Can the original source be traced?
 
 ## Next: Adapter Manifests
 
-Formalize adapter metadata so external adapters can describe:
+Adapter manifest examples now exist. The next step is to formalize them into a
+stable schema so external adapters can describe:
 
 - supported source formats
 - required dependencies
@@ -166,4 +178,3 @@ The core promise is simple:
 Copy, Tag, Link source material into portable semantic HTML packages.
 The package survives the tools.
 ```
-

@@ -108,7 +108,7 @@ if ($trufflehog) {
             (Join-Path $repoRoot "samples"),
             (Join-Path $repoRoot "scripts")
         ) | Where-Object { Test-Path -LiteralPath $_ }
-        & $trufflehog filesystem @scanTargets --no-update --no-verification --no-color --log-level=2
+        & $trufflehog filesystem @scanTargets --no-update --no-verification --no-color --json --fail --log-level=-1
     }
 } elseif ($AllowMissingExternalScanners) {
     Write-Warning "trufflehog not found; skipping because -AllowMissingExternalScanners was set."

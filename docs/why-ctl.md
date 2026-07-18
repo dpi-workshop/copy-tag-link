@@ -22,6 +22,10 @@ It preserves the original source, extracts reusable records and assets, writes
 plain semantic HTML, and emits rebuildable indexes such as search JSON and
 OKF-compatible Markdown cards.
 
+CTL does not use Markdown as the main memory format. Markdown cards are only
+catalogue/index files for OKF-style workflows. The richer source memory remains
+the preserved originals, semantic HTML, assets, manifests, and JSON records.
+
 ## The Core Idea
 
 ```text
@@ -72,6 +76,10 @@ OKF Markdown cards        = portable catalogue/index cards
 ```
 
 The cards point back to the richer package.
+
+In other words, CTL does not flatten a PDF, website, or document into Markdown.
+It preserves and links the parts, then emits Markdown cards so tools that expect
+Markdown/YAML can find the richer package.
 
 ## Relationship To Databases
 

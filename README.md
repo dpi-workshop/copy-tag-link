@@ -5,6 +5,12 @@
 RAG gives you chunks. Markdown gives you text. CTL gives you reusable,
 traceable parts.
 
+CTL-Core does **not** convert rich sources into Markdown as the main memory
+format. The durable package is semantic HTML plus preserved files, copied
+assets, manifests, JSON records, and rebuildable indexes. Markdown appears only
+as optional OKF-compatible catalogue cards that point back to the richer CTL
+package.
+
 ![CTL package flow](docs/assets/ctl-package-flow.svg)
 
 CTL-Core is a **local-first durable memory layer**, not a database and not a
@@ -182,6 +188,10 @@ OKF Markdown cards     = portable catalogue/index
 ```
 
 The OKF cards point back to the richer CTL HTML, records, and assets.
+
+Put plainly: CTL's source memory is not Markdown. CTL emits Markdown cards for
+OKF compatibility, but the reusable evidence lives in the preserved originals,
+semantic HTML, copied assets, manifests, and JSON records.
 
 ## Adapter Philosophy
 

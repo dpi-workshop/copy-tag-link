@@ -1,7 +1,8 @@
 #!/usr/bin/env python
-"""Export a CTL package as OKF-compatible Markdown cards.
+"""Export a CTL package as OKF-compatible Markdown catalogue cards.
 
-OKF is treated as the card catalogue. CTL HTML/assets remain the richer shelf.
+OKF is treated as the card catalogue. Markdown is not the main CTL memory
+format. CTL HTML/assets/manifests/records remain the richer shelf.
 """
 
 from __future__ import annotations

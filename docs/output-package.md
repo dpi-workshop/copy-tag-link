@@ -117,6 +117,10 @@ processed, and what assumptions were made.
 
 Stores OKF-compatible Markdown cards.
 
+These cards are not the main CTL memory format. They are catalogue/index cards
+for tools that expect Markdown/YAML. The richer evidence remains in preserved
+originals, semantic HTML, copied assets, manifests, and JSON records.
+
 Examples:
 
 ```text

@@ -4,6 +4,9 @@
 
 **Semantic HTML is the source-of-truth view for CTL memory.**
 
+If you are building a Karpathy wiki-RAG style second brain, but prefer HTML
+over Markdown, CTL-Core is for you.
+
 CTL-Core does **not** convert rich sources into Markdown as the main memory
 format. The durable package is semantic HTML plus preserved files, copied
 assets, manifests, JSON records, and rebuildable indexes. Markdown appears only

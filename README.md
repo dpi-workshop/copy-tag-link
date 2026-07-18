@@ -2,9 +2,6 @@
 
 **Copy, Tag, Link source material into portable semantic HTML packages.**
 
-RAG gives you chunks. Markdown gives you text. CTL gives you reusable,
-traceable parts.
-
 CTL-Core does **not** convert rich sources into Markdown as the main memory
 format. The durable package is semantic HTML plus preserved files, copied
 assets, manifests, JSON records, and rebuildable indexes. Markdown appears only

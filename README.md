@@ -1,10 +1,8 @@
-# CTL-Core
-
 **Copy, Tag, Link source material into portable semantic HTML packages.**
 
 **Semantic HTML is the source-of-truth view for CTL memory.**
 
-CTL-Core does **not** convert rich sources into Markdown as the main memory
+copy-tag-link does **not** convert rich sources into Markdown as the main memory
 format. The durable package is semantic HTML plus preserved files, copied
 assets, manifests, JSON records, and rebuildable indexes. Markdown appears only
 as optional OKF-compatible catalogue cards that point back to the richer CTL

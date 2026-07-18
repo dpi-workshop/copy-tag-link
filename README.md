@@ -26,12 +26,6 @@ The package can be opened as a static website, read as a human archive, or
 indexed by SQL, graph, vector, and agent workflows. The HTML remains useful
 even when the database changes, disappears, or gets rebuilt.
 
-The goal is simple:
-
-```text
-Your data should outlive your tools.
-```
-
 ## What CTL-Core Is In One Sentence
 
 CTL-Core is a vendor-neutral, database-optional, local-first evidence package

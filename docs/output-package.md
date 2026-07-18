@@ -3,6 +3,11 @@
 A CTL package is an ordinary folder. It can be opened locally, zipped, backed
 up, published as static files, or indexed with a database.
 
+Semantic HTML is the source-of-truth view for CTL memory. Original files are
+preserved evidence. JSON records, OKF Markdown cards, database tables, graph
+exports, vector embeddings, and RAG chunks are derivative indexes or exports
+that can be rebuilt.
+
 ```text
 package/
   assets/
@@ -149,8 +154,10 @@ CodeGraph bridges, or other graph tools.
 ## Source Of Truth Rule
 
 ```text
-Original source + CTL package files = durable record
-Database/index exports             = replaceable accelerators
+Original files                     = preserved evidence
+Semantic HTML                      = source-of-truth memory view
+JSON records + manifests           = structured package records
+OKF cards + databases + vectors    = rebuildable indexes/exports
 Generated reports                  = derived outputs
 ```
 

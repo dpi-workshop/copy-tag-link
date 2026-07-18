@@ -2,6 +2,8 @@
 
 **Copy, Tag, Link source material into portable semantic HTML packages.**
 
+**Semantic HTML is the source-of-truth view for CTL memory.**
+
 CTL-Core does **not** convert rich sources into Markdown as the main memory
 format. The durable package is semantic HTML plus preserved files, copied
 assets, manifests, JSON records, and rebuildable indexes. Markdown appears only
@@ -22,6 +24,11 @@ accounts, vendors, databases, clouds, and dashboards.
 The package can be opened as a static website, read as a human archive, or
 indexed by SQL, graph, vector, and agent workflows. The HTML remains useful
 even when the database changes, disappears, or gets rebuilt.
+
+CTL keeps the original files as preserved evidence. The semantic HTML is the
+stable source-of-truth view that humans and agents read. JSON, OKF Markdown
+cards, SQL tables, graph exports, vector embeddings, and RAG chunks are
+derivative indexes that can be rebuilt from the package.
 
 ## What CTL-Core Is In One Sentence
 
@@ -65,8 +72,8 @@ package/
   search.json
 ```
 
-Databases are optional acceleration layers. The CTL package remains the source
-of truth.
+Databases are optional acceleration layers. The semantic HTML package remains
+the source-of-truth memory layer.
 
 ## Quick Start
 

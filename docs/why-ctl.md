@@ -29,11 +29,14 @@ the preserved originals, semantic HTML, assets, manifests, and JSON records.
 ## The Core Idea
 
 ```text
-Original source files + semantic HTML + reusable assets = durable package
-Databases, vectors, graphs, and search indexes = replaceable accelerators
+Original source files = preserved evidence
+Semantic HTML        = source-of-truth memory view
+Reusable assets      = copied parts linked to the source
+Databases/vectors    = replaceable accelerators
 ```
 
-The CTL package is the record. Everything else can be rebuilt.
+The CTL package is the record. Semantic HTML is the view humans and agents can
+read directly. Everything else can be rebuilt.
 
 ## What CTL Preserves
 

@@ -270,11 +270,17 @@ current project safety policy.
 
 ## Status
 
-Early MVP. The current goal is to prove the shape:
+Early MVP, usable today for local CTL package generation from sample HTML, PDF,
+text, JSON, public source metadata, and source-code folders. The current goal is
+to harden the shape:
 
 ```text
 source in -> CTL package out -> open in browser -> index however you want
 ```
+
+The sample workflows are credential-free on purpose. Real projects can add
+optional parser, database, cloud, or model adapters without putting credentials
+inside CTL packages.
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) and [SECURITY.md](SECURITY.md) before
 opening issues or pull requests.

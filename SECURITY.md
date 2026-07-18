@@ -26,7 +26,12 @@ added before the first stable release.
 ## Secret Handling
 
 CTL-Core must not require real API keys, database passwords, private files, or
-cloud credentials to run the public demo.
+cloud credentials for its built-in sample workflows, smoke tests, or local
+package generation.
+
+Users may add optional adapters that use credentials for their own databases,
+cloud storage, or model providers. Those credentials must stay outside CTL
+packages, outside the public repository, and outside generated demo data.
 
 Before pushing or publishing, maintainers should run:
 

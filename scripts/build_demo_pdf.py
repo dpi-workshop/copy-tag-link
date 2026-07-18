@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Build the styled PDF sample used by the CTL-Core public demo.
+"""Build the styled PDF sample used by CTL-Core sample workflows.
 
 This script is optional and only needed when regenerating the sample PDF.
 It uses ReportLab and Pillow from the local environment.

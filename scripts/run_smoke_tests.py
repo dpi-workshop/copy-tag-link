@@ -68,6 +68,7 @@ def main() -> None:
             "ctl_core/adapters/database/sqlite_index.py",
             "ctl_core/adapters/database/sqlite_vec_index.py",
             "ctl_core/adapters/database/kuzu_index.py",
+            "ctl_core/adapters/parser/registry.py",
         ]
     )
 
@@ -78,6 +79,8 @@ def main() -> None:
     run([PYTHON, "-m", "ctl_core", "inspect", html_output])
     run([PYTHON, "-m", "ctl_core", "validate", html_output])
     run([PYTHON, "-m", "ctl_core", "search", html_output, "HTML"])
+    run([PYTHON, "-m", "ctl_core", "list-parser-adapters"])
+    run([PYTHON, "-m", "ctl_core", "check-parser-adapter", "parser.basic_html"])
     run([PYTHON, "-m", "ctl_core", "index-sqlite", html_output])
     exists(f"{html_output}/indexes/sqlite/ctl-index.sqlite")
     exists(f"{html_output}/indexes/sqlite/index-manifest.json")

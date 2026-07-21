@@ -1,0 +1,50 @@
+{
+  "schema_version": "0.1",
+  "adapter_id": "parser.example_bridge",
+  "name": "Example External Parser Bridge",
+  "adapter_family": "parser",
+  "status": "template",
+  "bundled": false,
+  "external_dependencies": [
+    {
+      "name": "external-parser-name",
+      "required": true,
+      "install_url": "https://example.com/install",
+      "license": "verify upstream license before release packaging"
+    }
+  ],
+  "permissions": {
+    "reads": [
+      "user-selected source file",
+      "adapter-specific config if explicitly supplied"
+    ],
+    "writes": [
+      "CTL package output folder",
+      "intermediate adapter result folder"
+    ],
+    "network_access": "not allowed by default",
+    "credentials": "not allowed unless documented by the adapter"
+  },
+  "inputs": {
+    "source_formats": ["pdf", "docx", "png"],
+    "source_path": "user supplied"
+  },
+  "outputs": {
+    "records": "assets/tables/ctl-records.json",
+    "assets": "assets/",
+    "html": "documents/",
+    "provenance": "manifests/provenance.json",
+    "okf_cards": "okf/"
+  },
+  "record_contract": {
+    "required": ["id", "type", "source_id", "order", "source_path", "provenance"],
+    "recommended": ["text", "html", "asset_path", "bbox", "page", "confidence", "metadata", "links", "tags"]
+  },
+  "safety_rules": [
+    "Do not mutate the original source file.",
+    "Do not treat parser output as analysis or verified truth.",
+    "Preserve exact coordinates and values when available.",
+    "Store confidence and provenance for every derived record.",
+    "Fail gracefully when the external parser is missing."
+  ]
+}

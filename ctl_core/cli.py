@@ -266,6 +266,27 @@ def cmd_query_kuzu(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_list_parser_adapters(args: argparse.Namespace) -> int:
+    from .adapters.parser import list_parser_adapters
+
+    adapters = list_parser_adapters()
+    if args.json:
+        print_json(adapters)
+        return 0
+    for adapter in adapters:
+        requires = ", ".join(adapter["requires"]) if adapter["requires"] else "none"
+        print(f"{adapter['id']} [{adapter['status']}] requires: {requires}")
+    return 0
+
+
+def cmd_check_parser_adapter(args: argparse.Namespace) -> int:
+    from .adapters.parser import check_parser_adapter
+
+    result = check_parser_adapter(args.adapter)
+    print_json(result)
+    return 0 if result["available"] else 1
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="ctl-core", description="Inspect, validate, and search CTL packages.")
     parser.add_argument("--version", action="version", version=f"CTL-Core {__version__}")
@@ -324,6 +345,17 @@ def build_parser() -> argparse.ArgumentParser:
     kuzu_query_parser.add_argument("record_id", help="CTL record id to inspect.")
     kuzu_query_parser.add_argument("--limit", type=int, default=20, help="Maximum result rows to print.")
     kuzu_query_parser.set_defaults(func=cmd_query_kuzu)
+
+    parser_list_parser = subparsers.add_parser("list-parser-adapters", help="List known parser adapters.")
+    parser_list_parser.add_argument("--json", action="store_true", help="Print full machine-readable adapter records.")
+    parser_list_parser.set_defaults(func=cmd_list_parser_adapters)
+
+    parser_check_parser = subparsers.add_parser(
+        "check-parser-adapter",
+        help="Check whether a parser adapter dependency appears to be available.",
+    )
+    parser_check_parser.add_argument("adapter", help="Parser adapter id, for example parser.docling.")
+    parser_check_parser.set_defaults(func=cmd_check_parser_adapter)
 
     return parser
 

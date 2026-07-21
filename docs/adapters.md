@@ -69,6 +69,8 @@ See [../examples/adapter-manifest.json](../examples/adapter-manifest.json) for
 a fuller example with dependency, permission, output, and quality-check fields.
 The [SQLite-vec adapter manifest](../examples/sqlite-vec-adapter-manifest.json)
 shows the same pattern for a rebuildable local vector index.
+The [parser bridge manifest](../examples/parser-bridge-manifest.json) shows the
+shape for external parser bridges such as Docling, MinerU, or PaddleOCR.
 
 ## Adapter Manifest
 
@@ -94,11 +96,21 @@ Community adapters should include a manifest like:
 | built-in basic-json | JSON metadata/data | stdlib | Apache-2.0 core | working |
 | built-in basic-text | txt/md/csv/tsv | stdlib | Apache-2.0 core | working |
 | built-in basic-pdf | born-digital PDF text/tables | optional `pdfplumber` or `pypdf` dependency | verify before release | working when installed |
-| Docling | PDF/doc layout | optional dependency | verify before release | prototype |
-| MinerU | complex PDF layout | optional dependency | verify before release | prototype |
-| PaddleOCR | OCR/images | optional dependency | verify before release | prototype |
+| Docling | PDF/doc layout | optional dependency | verify before release | optional bridge |
+| MinerU | complex PDF layout | optional dependency | verify before release | optional bridge |
+| PaddleOCR | OCR/images | optional dependency | verify before release | optional bridge |
 | Pandoc | format conversion | external CLI | verify before release | planned |
 | Playwright | rendered websites | optional dependency | verify before release | planned |
+
+The parser adapter registry is machine-readable:
+
+```shell
+python -m ctl_core list-parser-adapters --json
+python -m ctl_core check-parser-adapter parser.docling
+```
+
+CTL-Core may check whether parser dependencies exist, but it does not install
+Docling, MinerU, PaddleOCR, Pandoc, or Playwright for the user.
 
 ## Codebase And Code Intelligence
 

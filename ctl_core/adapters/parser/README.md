@@ -29,6 +29,21 @@ They must not:
 | `parser.basic_pdf` | working when installed | optional `pdfplumber` or `pypdf` | born-digital PDFs, simple tables, simple figures |
 | `parser.codebase` | working | Python standard library plus optional Git metadata | source trees, README files, code docs, repo notes, simple code graphs |
 
+Machine-readable adapter metadata lives in `registry.py`.
+
+```shell
+python -m ctl_core list-parser-adapters
+python -m ctl_core list-parser-adapters --json
+python -m ctl_core check-parser-adapter parser.basic_html
+python -m ctl_core check-parser-adapter parser.docling
+```
+
+The built-in local-file parser harness is:
+
+```shell
+python scripts/ctl_parser_lab.py samples/simple-source/market-snapshot.html -o output/parser-demo
+```
+
 ## Planned Optional Parser Bridges
 
 These stay optional. Users install the external tools themselves; CTL adapters
@@ -36,11 +51,23 @@ only translate their outputs into CTL packages.
 
 | Adapter | Status | External Tool | Best For |
 | --- | --- | --- | --- |
-| `parser.docling` | prototype private | Docling | PDF/DOCX layout, tables, figures |
-| `parser.mineru` | prototype private | MinerU | academic/scientific PDFs, formulas, complex layouts |
-| `parser.paddleocr` | prototype private | PaddleOCR | OCR, screenshots, scanned pages, text inside images |
+| `parser.docling` | optional bridge | Docling | PDF/DOCX layout, tables, figures |
+| `parser.mineru` | optional bridge | MinerU | academic/scientific PDFs, formulas, complex layouts |
+| `parser.paddleocr` | optional bridge | PaddleOCR | OCR, screenshots, scanned pages, text inside images |
 | `parser.pandoc` | planned | Pandoc CLI | legacy format conversion and document bridges |
 | `parser.playwright` | planned | Playwright | rendered websites and JavaScript-heavy pages |
 
 Parser bridges should not own databases, cloud sync, social intake, or agent
 workflow state. They read a source and produce a CTL package.
+
+## Bridge Rule
+
+Optional bridge adapters may inspect whether external dependencies are
+installed, but they should not install them automatically in CTL-Core.
+
+```text
+external parser output -> CTL bridge -> ctl-records.json + assets + semantic HTML
+```
+
+That keeps the Apache-2.0 core clean, lets users choose their own parser stack,
+and gives community adapters room to improve without making CTL-Core fragile.

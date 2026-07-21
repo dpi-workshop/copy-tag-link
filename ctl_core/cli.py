@@ -287,6 +287,12 @@ def cmd_check_parser_adapter(args: argparse.Namespace) -> int:
     return 0 if result["available"] else 1
 
 
+def cmd_mcp(args: argparse.Namespace) -> int:
+    from .mcp_server import serve
+
+    return serve()
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="ctl-core", description="Inspect, validate, and search CTL packages.")
     parser.add_argument("--version", action="version", version=f"CTL-Core {__version__}")
@@ -356,6 +362,9 @@ def build_parser() -> argparse.ArgumentParser:
     )
     parser_check_parser.add_argument("adapter", help="Parser adapter id, for example parser.docling.")
     parser_check_parser.set_defaults(func=cmd_check_parser_adapter)
+
+    mcp_parser = subparsers.add_parser("mcp", help="Run the CTL-Core MCP stdio server.")
+    mcp_parser.set_defaults(func=cmd_mcp)
 
     return parser
 

@@ -109,6 +109,27 @@ python -m ctl_core validate output/demo-market-snapshot
 python -m ctl_core search output/demo-market-snapshot HTML
 ```
 
+## MCP Server
+
+Agents can read CTL packages through the built-in dependency-free MCP stdio
+server:
+
+```shell
+python -m ctl_core mcp
+```
+
+Set `CTL_MCP_ROOTS` to the folder or folders where your CTL packages live. The
+server exposes tools to list packages, validate packages, read manifests, search
+records, fetch record details, read assets, and read OKF cards.
+
+```powershell
+$env:CTL_MCP_ROOTS="E:\Classroom;E:\CTL\output"
+python -m ctl_core mcp
+```
+
+See [MCP server guide](docs/mcp.md) for tool names, security behavior, and
+example agent configuration.
+
 ## PDF Demo
 
 The stronger demo starts with a styled PDF and produces a plain CTL package
@@ -283,6 +304,7 @@ opening issues or pull requests.
 - [Demos](docs/demos.md)
 - [Adapter guide](docs/adapters.md)
 - [Database adapter contract](docs/database-adapter-contract.md)
+- [MCP server guide](docs/mcp.md)
 - [Security policy](SECURITY.md)
 - [Roadmap](docs/roadmap.md)
 - [Release checklist](docs/release-checklist.md)

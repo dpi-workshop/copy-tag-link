@@ -18,6 +18,7 @@ The first public release proves the basic shape:
 - emit OKF-compatible Markdown cards
 - provide initial `python -m ctl_core inspect`, `validate`, and `search`
   commands
+- provide initial `python -m ctl_core mcp` server for agent access
 - validate generated CTL packages in smoke tests
 - run smoke tests and release safety checks
 - document how agents should read CTL packages
@@ -107,21 +108,35 @@ Targets may include:
 
 These indexes are accelerators. They are not the source of truth.
 
-## Next: MCP And Agent Skills
+## Current: MCP And Agent Skills
 
-Expose CTL packages through agent-friendly tools.
-
-Expected MCP operations:
+Expose CTL packages through agent-friendly tools. The first dependency-free MCP
+stdio server is available through:
 
 ```text
-list_packages
-read_manifest
-search_records
-read_record
-read_asset
-read_okf_cards
-write_annotation
-validate_package
+python -m ctl_core mcp
+```
+
+Initial MCP operations:
+
+```text
+ctl_list_packages
+ctl_validate_package
+ctl_read_manifest
+ctl_package_summary
+ctl_search_records
+ctl_get_record
+ctl_get_asset
+ctl_list_okf_cards
+ctl_read_okf_card
+```
+
+Planned MCP operations:
+
+```text
+ctl_write_annotation
+ctl_export_okf_cards
+ctl_ingest_source
 ```
 
 Expected skill behavior:

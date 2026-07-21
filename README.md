@@ -10,6 +10,10 @@ CTL-Core uses semantic HTML as the durable working layer, then adds replaceable
 indexes for search, SQL, vector stores, graph stores, or OKF-compatible
 catalogues.
 
+[![Play the CopyTagLink explainer](docs/assets/explainer-play-card.svg)](https://dpi-workshop.github.io/copy-tag-link/explainer/)
+
+[Play the browser-native CopyTagLink explainer](https://dpi-workshop.github.io/copy-tag-link/explainer/)
+
 copy-tag-link does **not** convert rich sources into Markdown as the main memory
 format.  Markdown appears only as optional OKF-compatible catalogue cards that 
 point back to the richer CTL package.

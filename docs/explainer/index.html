@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1920, height=1080">
+  <title>CopyTagLink Explainer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-color: #0b0f19;
+      --panel-bg: rgba(17, 24, 39, 0.7);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --neon-blue: #00f0ff;
+      --neon-orange: #ff9f1c;
+      --neon-teal: #05f2c7;
+      --gradient-text: linear-gradient(135deg, #00f0ff 0%, #ff9f1c 100%);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      overflow: hidden;
+      width: 1920px;
+      height: 1080px;
+    }
+
+    #root {
+      position: relative;
+      width: 1920px;
+      height: 1080px;
+      background-color: var(--bg-color);
+    }
+
+    /* Common slide properties */
+    .slide {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      padding: 80px 120px;
+      background: radial-gradient(circle at 80% 20%, rgba(0, 240, 255, 0.04) 0%, transparent 60%),
+                  radial-gradient(circle at 20% 80%, rgba(255, 159, 28, 0.04) 0%, transparent 60%);
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+      pointer-events: none;
+    }
+
+    /* Left narrative block */
+    .narrative {
+      flex: 1.1;
+      max-width: 750px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .narrative h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 56px;
+      font-weight: 700;
+      line-height: 1.1;
+    }
+
+    .narrative p {
+      font-size: 26px;
+      line-height: 1.6;
+      color: var(--text-muted);
+      font-weight: 300;
+    }
+
+    /* Right visual preview panel */
+    .preview-panel {
+      flex: 0.9;
+      height: 680px;
+      border-radius: 24px;
+      border: 1px solid var(--border-color);
+      background-color: var(--panel-bg);
+      backdrop-filter: blur(16px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 40px 80px rgba(0, 0, 0, 0.5);
+    }
+
+    .preview-panel img {
+      max-width: 90%;
+      max-height: 90%;
+      object-fit: contain;
+      border-radius: 12px;
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.4);
+    }
+
+    /* Title Slide Specifics */
+    .title-slide {
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      gap: 36px;
+      background: radial-gradient(circle at center, rgba(0, 240, 255, 0.08) 0%, transparent 70%);
+    }
+
+    .title-slide h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 96px;
+      font-weight: 700;
+      background: var(--gradient-text);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 12px;
+    }
+
+    .title-slide h2 {
+      font-size: 40px;
+      font-weight: 300;
+      color: var(--text-muted);
+    }
+
+    /* Highlights for philosophy slide */
+    .highlight-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 30px;
+      width: 100%;
+    }
+
+    .h-card {
+      border: 1px solid var(--border-color);
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 16px;
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: all 0.3s ease;
+    }
+
+    .h-card h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 28px;
+      font-weight: 700;
+    }
+
+    .h-card p {
+      font-size: 18px;
+      line-height: 1.5;
+    }
+
+    .h-card.blue h3 { color: var(--neon-blue); }
+    .h-card.orange h3 { color: var(--neon-orange); }
+    .h-card.teal h3 { color: var(--neon-teal); }
+    .h-card.gradient h3 {
+      background: var(--gradient-text);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Active Slide Toggle */
+    .active-slide {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Play overlay button style */
+    #play-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(11, 15, 25, 0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 99999;
+      transition: opacity 0.5s ease;
+    }
+
+    #play-btn {
+      padding: 24px 50px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 32px;
+      font-weight: bold;
+      color: var(--bg-color);
+      background: var(--neon-teal);
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 15px 40px rgba(5, 242, 199, 0.3);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    #play-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 20px 50px rgba(5, 242, 199, 0.5);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Overlay Play Button -->
+  <div id="play-overlay">
+    <button id="play-btn">Play Explainer Video</button>
+  </div>
+
+  <!-- Root Element containing all timed frames -->
+  <div id="root" data-composition-id="explainer" data-width="1920" data-height="1080">
+
+    <!-- Slide 1: Welcome/Title -->
+    <div class="slide clip" data-start="0" data-duration="28" data-audio="assets/audio/scene_1_us-male.mp3" id="slide1">
+      <div class="narrative">
+        <p style="font-size: 24px; color: var(--neon-blue); font-weight: 600; letter-spacing: 2px; text-transform: uppercase;">
+          copy-tag-link
+        </p>
+        <h2 style="font-family: 'Space Grotesk', sans-serif; font-size: 60px; font-weight: 700; background: var(--gradient-text); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+          Shared AI Memory
+        </h2>
+        <p>Welcome to Copy-Tag-Link, or CTL for short. A file-first ingestion standard for shared AI memory.</p>
+        <p>When you build AI knowledge systems, you start with rich documents containing maps, columns, and data tables.</p>
+      </div>
+      <div class="preview-panel">
+        <!-- Playwright-synchronized scan line -->
+        <div id="scan-line" style="position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: linear-gradient(90deg, transparent, var(--neon-blue), transparent); box-shadow: 0 0 12px var(--neon-blue); pointer-events: none; z-index: 10;"></div>
+        <img src="assets/images/usgs_report_preview_1784622379801.png" alt="USGS Report Cover Ingestion">
+      </div>
+    </div>
+
+    <!-- Slide 2: Vectors Chunk -->
+    <div class="slide clip" data-start="28" data-duration="29" data-audio="assets/audio/scene_2_us-male.mp3" id="slide2">
+      <div class="narrative">
+        <h2 style="color: var(--neon-blue);">Vectors Chunk</h2>
+        <p>Traditional RAG systems shred documents like scrap paper. They break down layout structures and generate raw float coordinate matrices.</p>
+        <p>The core structure is lost, image contexts dissolve, and exact coordinate/table data are replaced by approximations.</p>
+      </div>
+      <div class="preview-panel">
+        <img src="assets/images/vector_shredder_loma_prieta_1784618205717.png" alt="Vectors Chunk Shredder">
+      </div>
+    </div>
+
+    <!-- Slide 3: Markdown Flattens -->
+    <div class="slide clip" data-start="57" data-duration="21" data-audio="assets/audio/scene_3_us-male.mp3" id="slide3">
+      <div class="narrative">
+        <h2 style="color: var(--neon-orange);">Markdown Flattens</h2>
+        <p>Converting rich layouts directly to Markdown compresses multi-column layouts into a vertical stream, scrambling chronological order.</p>
+        <p>Table cells lose boundaries, and spatial components like maps are reduced to flat, detached text captions.</p>
+      </div>
+      <div class="preview-panel">
+        <img src="assets/images/markdown_flattening_loma_prieta_1784618223243.png" alt="Markdown Flattening Diagram">
+      </div>
+    </div>
+
+    <!-- Slide 4: Copy-Tag-Link Preserves -->
+    <div class="slide clip" data-start="78" data-duration="29" data-audio="assets/audio/scene_4_us-male.mp3" id="slide4">
+      <div class="narrative">
+        <h2 style="color: var(--neon-teal);">Copy-Tag-Link Preserves</h2>
+        <p>We preserve the original source as evidence, copy out layout assets like images and tables, tag them with provenance, and link them to semantic HTML views.</p>
+        <p>The output remains human-readable, machine-validatable, and fully independent of any one model.</p>
+      </div>
+      <div class="preview-panel">
+        <img src="assets/images/copy_tag_link_loma_prieta_1784618236724.png" alt="Copy Tag Link Concept">
+      </div>
+    </div>
+
+    <!-- Slide 5: OKF Indexing -->
+    <div class="slide clip" data-start="107" data-duration="19" data-audio="assets/audio/scene_5_us-male.mp3" id="slide5">
+      <div class="narrative">
+        <h2 style="color: var(--neon-orange);">OKF Indexing</h2>
+        <p>These parsed components are cataloged using OKF cards: markdown files with standard YAML metadata tags.</p>
+        <p>The OKF cards act as portable index entries, making your rich HTML segments and assets instantly searchable and accessible to any database or AI agent you choose.</p>
+      </div>
+      <div class="preview-panel">
+        <img src="assets/images/okf_card_index_1784617370961.png" alt="OKF Card Index">
+      </div>
+    </div>
+
+    <!-- Slide 6: Rebuilding & Portability -->
+    <div class="slide clip" data-start="126" data-duration="28" data-audio="assets/audio/scene_6_us-male.mp3" id="slide6">
+      <div class="narrative">
+        <h2 style="color: var(--neon-blue);">Rebuilding & Portability</h2>
+        <p>Because the folder is the source of truth, your memory survives database failures. If your database dies, you can rebuild your indexes in minutes.</p>
+        <p>Use the OKF tags to index your data with SQLite, PostgreSQL, Qdrant, Graphify, Obsidian, or whatever you like.</p>
+      </div>
+      <div class="preview-panel" style="padding: 40px; display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: bold; color: var(--neon-blue);">
+        Rebuild FTS & Vector Spaces in Minutes
+      </div>
+    </div>
+
+    <!-- Slide 7: The CTL Philosophy -->
+    <div class="slide clip" data-start="154" data-duration="24" data-audio="assets/audio/scene_7_us-male.mp3" id="slide7">
+      <div class="narrative">
+        <h2 style="color: var(--neon-teal);">The CTL Philosophy</h2>
+        <p>Keep your data local, portable, and durable. The folder is the source of truth: databases and vector spaces are rebuildable accelerators.</p>
+      </div>
+      <div class="preview-panel" style="padding: 40px; display: flex; align-items: center;">
+        <div class="highlight-grid">
+          <div class="h-card blue">
+            <h3>Local-First</h3>
+            <p>Zippable, syncable folders that run offline.</p>
+          </div>
+          <div class="h-card orange">
+            <h3>Zero Trust</h3>
+            <p>Preserves all source evidence cleanly before review.</p>
+          </div>
+          <div class="h-card teal">
+            <h3>OKF Connected</h3>
+            <p>Generates index cards for Obsidian and RAG pipelines.</p>
+          </div>
+          <div class="h-card gradient">
+            <h3>Rebuildable</h3>
+            <p>If indexes fail, rebuild them directly from source.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 8: Outro & Call to Action -->
+    <div class="slide title-slide clip" data-start="178" data-duration="19" data-audio="assets/audio/scene_8_us-male.mp3" id="slide8">
+      <div>
+        <h1 style="font-size: 80px;">Join the Ecosystem</h1>
+        <h2 style="font-size: 32px; color: var(--neon-teal);">github.com/dpi-workshop/copy-tag-link</h2>
+      </div>
+      <p style="font-size: 22px; max-width: 800px; line-height: 1.5; color: var(--text-muted);">
+        CTL-Core is designed to be simple. Fork the repository, plug in the custom parsers and database indexers you need, and keep your memory standard.
+      </p>
+    </div>
+
+  </div>
+
+  <!-- Audio-Visual Playback Controller -->
+  <script>
+    const playOverlay = document.getElementById('play-overlay');
+    const playBtn = document.getElementById('play-btn');
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    let currentSlideIndex = 0;
+    let audioObject = null;
+
+    function showSlide(index) {
+      slides.forEach((slide, idx) => {
+        if (idx === index) {
+          slide.classList.add('active-slide');
+        } else {
+          slide.classList.remove('active-slide');
+        }
+      });
+    }
+
+    // Expose update function for automated rendering engines (playwright)
+    function updateTimeline(seconds) {
+      // Hide overlay if timeline is manually driven
+      if (playOverlay) {
+        playOverlay.style.opacity = '0';
+        playOverlay.style.pointerEvents = 'none';
+      }
+      slides.forEach(slide => {
+        const start = parseFloat(slide.getAttribute('data-start'));
+        const duration = parseFloat(slide.getAttribute('data-duration'));
+        if (seconds >= start && seconds < start + duration) {
+          slide.classList.add('active-slide');
+        } else {
+          slide.classList.remove('active-slide');
+        }
+      });
+
+      // Synchronized Scan Line Animation for Slide 1
+      if (seconds >= 0 && seconds < 28) {
+        const scanLine = document.getElementById('scan-line');
+        if (scanLine) {
+          const cycle = 3; // seconds per full scan down-and-up
+          const norm = (seconds % cycle) / cycle; // 0 to 1
+          const progress = norm < 0.5 ? (norm * 2) : (2 - norm * 2);
+          scanLine.style.top = (progress * 100) + '%';
+        }
+      }
+    }
+    window.__updateTimeline = updateTimeline;
+
+    function playScene(index) {
+      if (index >= slides.length) {
+        // Video finished, show play button again
+        playOverlay.style.opacity = '1';
+        playOverlay.style.pointerEvents = 'auto';
+        currentSlideIndex = 0;
+        return;
+      }
+
+      currentSlideIndex = index;
+      showSlide(index);
+
+      const slide = slides[index];
+      const audioSrc = slide.getAttribute('data-audio');
+
+      if (audioObject) {
+        audioObject.pause();
+      }
+
+      audioObject = new Audio(audioSrc);
+      audioObject.play().catch(err => {
+        console.error("Playback failed:", err);
+        // Fallback: auto-advance if audio fails
+        setTimeout(() => playScene(index + 1), 5000);
+      });
+
+      audioObject.onended = () => {
+        playScene(index + 1);
+      };
+    }
+
+    playBtn.addEventListener('click', () => {
+      playOverlay.style.opacity = '0';
+      playOverlay.style.pointerEvents = 'none';
+      if (root.requestFullscreen) {
+        root.requestFullscreen().catch(() => {});
+      }
+      playScene(0);
+    });
+  </script>
+</body>
+</html>

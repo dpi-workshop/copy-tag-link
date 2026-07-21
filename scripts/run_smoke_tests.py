@@ -65,6 +65,9 @@ def main() -> None:
             "scripts/build_demo_pdf.py",
             "ctl_core/cli.py",
             "ctl_core/__main__.py",
+            "ctl_core/adapters/database/sqlite_index.py",
+            "ctl_core/adapters/database/sqlite_vec_index.py",
+            "ctl_core/adapters/database/kuzu_index.py",
         ]
     )
 
@@ -75,6 +78,10 @@ def main() -> None:
     run([PYTHON, "-m", "ctl_core", "inspect", html_output])
     run([PYTHON, "-m", "ctl_core", "validate", html_output])
     run([PYTHON, "-m", "ctl_core", "search", html_output, "HTML"])
+    run([PYTHON, "-m", "ctl_core", "index-sqlite", html_output])
+    exists(f"{html_output}/indexes/sqlite/ctl-index.sqlite")
+    exists(f"{html_output}/indexes/sqlite/index-manifest.json")
+    run([PYTHON, "-m", "ctl_core", "query-sqlite", html_output, "HTML"])
 
     codebase_output = smoke_output("codebase")
     run([PYTHON, "scripts/ctl_codebase_adapter.py", ".", "-o", codebase_output, "--name", "ctl-core-smoke"])

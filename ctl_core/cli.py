@@ -200,6 +200,72 @@ def cmd_search(args: argparse.Namespace) -> int:
     return 0
 
 
+def print_json(value: Any) -> None:
+    print(json.dumps(value, indent=2, ensure_ascii=False))
+
+
+def cmd_index_sqlite(args: argparse.Namespace) -> int:
+    from .adapters.database.sqlite_index import index_package
+
+    root = package_path(args.package)
+    database_path = Path(args.output).expanduser().resolve() if args.output else None
+    print_json(index_package(root, database_path=database_path))
+    return 0
+
+
+def cmd_query_sqlite(args: argparse.Namespace) -> int:
+    from .adapters.database.sqlite_index import query_index
+
+    rows = query_index(package_path(args.database_or_package), args.query, limit=args.limit)
+    print_json(rows)
+    return 0
+
+
+def cmd_index_sqlite_vec(args: argparse.Namespace) -> int:
+    from .adapters.database.sqlite_vec_index import index_package
+
+    root = package_path(args.package)
+    database_path = Path(args.output).expanduser().resolve() if args.output else None
+    print_json(
+        index_package(
+            root,
+            embeddings_path=Path(args.embeddings).expanduser().resolve(),
+            database_path=database_path,
+            dimensions=args.dimensions,
+            model=args.model,
+        )
+    )
+    return 0
+
+
+def cmd_query_sqlite_vec(args: argparse.Namespace) -> int:
+    from .adapters.database.sqlite_vec_index import query_index
+
+    embedding = json.loads(args.embedding)
+    if not isinstance(embedding, list):
+        raise ValueError("--embedding must be a JSON array")
+    rows = query_index(package_path(args.database_or_package), embedding, limit=args.limit)
+    print_json(rows)
+    return 0
+
+
+def cmd_index_kuzu(args: argparse.Namespace) -> int:
+    from .adapters.database.kuzu_index import index_package
+
+    root = package_path(args.package)
+    database_path = Path(args.output).expanduser().resolve() if args.output else None
+    print_json(index_package(root, database_path=database_path))
+    return 0
+
+
+def cmd_query_kuzu(args: argparse.Namespace) -> int:
+    from .adapters.database.kuzu_index import query_neighbors
+
+    rows = query_neighbors(package_path(args.database_or_package), args.record_id, limit=args.limit)
+    print_json(rows)
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="ctl-core", description="Inspect, validate, and search CTL packages.")
     parser.add_argument("--version", action="version", version=f"CTL-Core {__version__}")
@@ -220,6 +286,45 @@ def build_parser() -> argparse.ArgumentParser:
     search_parser.add_argument("--strict", action="store_true", help="Exit with code 1 when no matches are found.")
     search_parser.set_defaults(func=cmd_search)
 
+    sqlite_parser = subparsers.add_parser("index-sqlite", help="Build a local SQLite/FTS index for a CTL package.")
+    sqlite_parser.add_argument("package", help="Path to a CTL package folder.")
+    sqlite_parser.add_argument("--output", help="Optional output .sqlite path.")
+    sqlite_parser.set_defaults(func=cmd_index_sqlite)
+
+    sqlite_query_parser = subparsers.add_parser("query-sqlite", help="Query a local SQLite/FTS CTL index.")
+    sqlite_query_parser.add_argument("database_or_package", help="Path to a CTL package folder or .sqlite index.")
+    sqlite_query_parser.add_argument("query", help="SQLite FTS query string, falling back to LIKE if FTS is unavailable.")
+    sqlite_query_parser.add_argument("--limit", type=int, default=10, help="Maximum result rows to print.")
+    sqlite_query_parser.set_defaults(func=cmd_query_sqlite)
+
+    sqlite_vec_parser = subparsers.add_parser(
+        "index-sqlite-vec",
+        help="Build an optional sqlite-vec semantic index from precomputed embeddings.",
+    )
+    sqlite_vec_parser.add_argument("package", help="Path to a CTL package folder.")
+    sqlite_vec_parser.add_argument("--embeddings", required=True, help="JSON/JSONL file with record ids and embeddings.")
+    sqlite_vec_parser.add_argument("--output", help="Optional output .sqlite path.")
+    sqlite_vec_parser.add_argument("--dimensions", type=int, help="Expected embedding dimensions.")
+    sqlite_vec_parser.add_argument("--model", default="user-provided", help="Embedding model/provider label to record.")
+    sqlite_vec_parser.set_defaults(func=cmd_index_sqlite_vec)
+
+    sqlite_vec_query_parser = subparsers.add_parser("query-sqlite-vec", help="Query an optional sqlite-vec CTL index.")
+    sqlite_vec_query_parser.add_argument("database_or_package", help="Path to a CTL package folder or vector .sqlite index.")
+    sqlite_vec_query_parser.add_argument("--embedding", required=True, help="JSON array query embedding.")
+    sqlite_vec_query_parser.add_argument("--limit", type=int, default=10, help="Maximum result rows to print.")
+    sqlite_vec_query_parser.set_defaults(func=cmd_query_sqlite_vec)
+
+    kuzu_parser = subparsers.add_parser("index-kuzu", help="Build an optional Kuzu graph index for a CTL package.")
+    kuzu_parser.add_argument("package", help="Path to a CTL package folder.")
+    kuzu_parser.add_argument("--output", help="Optional output Kuzu database path.")
+    kuzu_parser.set_defaults(func=cmd_index_kuzu)
+
+    kuzu_query_parser = subparsers.add_parser("query-kuzu", help="Query neighbors from an optional Kuzu graph index.")
+    kuzu_query_parser.add_argument("database_or_package", help="Path to a CTL package folder or Kuzu database folder.")
+    kuzu_query_parser.add_argument("record_id", help="CTL record id to inspect.")
+    kuzu_query_parser.add_argument("--limit", type=int, default=20, help="Maximum result rows to print.")
+    kuzu_query_parser.set_defaults(func=cmd_query_kuzu)
+
     return parser
 
 
@@ -228,6 +333,6 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
     try:
         return int(args.func(args))
-    except (OSError, ValueError) as exc:
+    except (OSError, RuntimeError, ValueError) as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 1

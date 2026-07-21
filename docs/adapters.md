@@ -132,20 +132,21 @@ The shared database adapter contract is documented in
 
 | Adapter | Best For | Integration Type | License Status | CTL Status |
 | --- | --- | --- | --- | --- |
-| SQLite | portable local indexes | stdlib/embedded | public domain style SQLite core | working/private |
-| SQLite-vec | local semantic search beside SQLite/FTS indexes | optional SQLite extension/Python package | MIT/Apache-2.0 upstream; pre-v1, verify before adapter release | planned |
+| SQLite | portable local indexes, FTS keyword search | stdlib/embedded | public domain style SQLite core | working |
+| SQLite-vec | local semantic search beside SQLite/FTS indexes | optional SQLite extension/Python package | MIT/Apache-2.0 upstream; pre-v1, verify before adapter release | working optional |
 | DuckDB | local analytical SQL | optional dependency | MIT | working/private |
 | PostgreSQL | multi-user server indexes | server database | PostgreSQL License | working/private |
 | MongoDB | document-shaped records/manifests | server database | external terms vary | working/private |
 | Qdrant | vectors/semantic search | vector store | Apache-2.0 | working/private |
 | LanceDB | local multimodal/vector tables | vector lake | Apache-2.0 | working/private |
-| Kuzu | embedded graph/GraphRAG | optional dependency | MIT | working/private |
+| Kuzu | embedded graph/GraphRAG | optional dependency | MIT | working optional |
 | Neo4j/Cypher | server graph import/export | graph server/export | external terms vary | working/private |
 | libSQL/Turso local | SQLite-compatible local index | embedded/local adapter | verify before release | planned |
 
 The working/private status means prototype code exists in the internal CTL tree
 and should be promoted only after cleanup, security review, and dependency
-license review.
+license review. Working optional means the public adapter exists, but users must
+install the upstream dependency themselves.
 
 ## Source Input Adapters
 

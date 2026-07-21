@@ -111,16 +111,17 @@ back to the package.
 SQLite is the first local index target because it is small, portable, and
 already available in Python through the standard library.
 
-Initial implementation:
+Implemented in `ctl_core/adapters/database/sqlite_index.py`.
 
-1. Add a script or CLI command that reads a CTL package and writes
-   `indexes/sqlite/ctl-index.sqlite`.
-2. Create tables for package metadata, records, text rows, links, tags, and
-   assets.
-3. Add SQLite FTS for keyword search over record text and HTML fragments.
-4. Write `indexes/sqlite/index-manifest.json`.
-5. Add smoke tests that build a CTL package, create the SQLite index, and query
-   at least one known record.
+```shell
+python -m ctl_core index-sqlite output/my-package
+python -m ctl_core query-sqlite output/my-package "search words"
+```
+
+The adapter reads a CTL package and writes `indexes/sqlite/ctl-index.sqlite`.
+It creates tables for package metadata, records, text rows, links, tags, and
+assets, adds SQLite FTS for keyword search, writes
+`indexes/sqlite/index-manifest.json`, and is covered by the default smoke test.
 
 SQLite should require no network access and no credentials.
 
@@ -129,35 +130,49 @@ SQLite should require no network access and no credentials.
 SQLite-vec is the first lightweight local vector target. It should be optional,
 detected at runtime, and never vendored into CTL-Core.
 
-Initial implementation:
+Implemented in `ctl_core/adapters/database/sqlite_vec_index.py`.
 
-1. Reuse the SQLite index tables.
-2. Detect whether `sqlite-vec` is installed.
-3. If it is missing, print install guidance and exit cleanly.
-4. Add vector metadata tables for embedding model name, dimensions, and record
-   ids.
-5. Accept embeddings from a user-provided embedding provider or precomputed
-   embedding file. Do not require any hosted model provider in CTL-Core.
-6. Write vectors into `indexes/sqlite-vec/ctl-vector-index.sqlite`.
-7. Add a sample query path that returns CTL record ids and distances.
-8. Record the embedding model and dimensions in
-   `indexes/sqlite-vec/index-manifest.json`.
+```shell
+python -m ctl_core index-sqlite-vec output/my-package --embeddings examples/sqlite-vec-demo-embeddings.jsonl
+python -m ctl_core query-sqlite-vec output/my-package --embedding "[0.1, 0.2, 0.3]"
+```
+
+This adapter accepts embeddings from a user-provided embedding provider or
+precomputed embedding file. It does not require or call any hosted model
+provider in CTL-Core. It writes vectors into
+`indexes/sqlite-vec/ctl-vector-index.sqlite`, stores embedding model metadata,
+and records dimensions in `indexes/sqlite-vec/index-manifest.json`.
+The included demo embeddings file is synthetic and exists only to document the
+file shape.
 
 SQLite-vec should sit between plain SQLite keyword search and heavier vector
 stores such as Qdrant or LanceDB.
 
+## Kuzu Implementation
+
+Implemented in `ctl_core/adapters/database/kuzu_index.py`.
+
+```shell
+python -m ctl_core index-kuzu output/my-package
+python -m ctl_core query-kuzu output/my-package record-0001
+```
+
+Kuzu creates an embedded graph index under `indexes/kuzu/ctl-graph.kuzu`.
+The adapter stores package, record, tag, asset, and link-target nodes, plus
+relationships from packages to records and from records to their tags, assets,
+and links. It is optional and fails with install guidance when Kuzu is missing.
+
 ## Future Adapter Targets
 
-After SQLite and SQLite-vec, promote database adapters in this order:
+After SQLite, SQLite-vec, and Kuzu, promote database adapters in this order:
 
 1. DuckDB for local analytics.
-2. Kuzu for embedded graph queries.
-3. PostgreSQL for multi-user/server deployments.
-4. Qdrant for serious vector search.
-5. LanceDB for local multimodal vectors.
-6. MongoDB for document-shaped workflow metadata.
-7. Neo4j/Cypher export for server graph workflows.
-8. libSQL/Turso local for SQLite-compatible experiments.
+2. PostgreSQL for multi-user/server deployments.
+3. Qdrant for serious vector search.
+4. LanceDB for local multimodal vectors.
+5. MongoDB for document-shaped workflow metadata.
+6. Neo4j/Cypher export for server graph workflows.
+7. libSQL/Turso local for SQLite-compatible experiments.
 
 Each adapter should follow the same rule:
 

@@ -166,20 +166,20 @@
       "id": "database.sqlite",
       "name": "SQLite",
       "category": "database",
-      "status": "working_private",
-      "default_enabled": false,
+      "status": "working",
+      "default_enabled": true,
       "dependency_type": "stdlib_or_embedded",
-      "bundled": false,
+      "bundled": true,
       "best_for": ["local indexes", "single-user packages", "portable search", "rebuildable local state"],
       "requires": [],
       "license": "public domain style SQLite core",
-      "notes": "Good local pocket notebook. Not the source of truth."
+      "notes": "Implemented by ctl_core.adapters.database.sqlite_index. Builds rebuildable SQLite tables plus FTS from an existing CTL package."
     },
     {
       "id": "database.sqlite_vec",
       "name": "SQLite-vec",
       "category": "database",
-      "status": "planned",
+      "status": "working_optional",
       "default_enabled": false,
       "dependency_type": "optional_sqlite_extension_or_python_package",
       "bundled": false,
@@ -188,7 +188,7 @@
       "install_url": "https://github.com/asg017/sqlite-vec",
       "project_url": "https://github.com/asg017/sqlite-vec",
       "license": "MIT/Apache-2.0 upstream; pre-v1, verify before adapter release",
-      "notes": "Use as a rebuildable local vector index beside CTL packages. Do not vendor into CTL-Core."
+      "notes": "Implemented by ctl_core.adapters.database.sqlite_vec_index. Accepts user-provided embeddings only; CTL-Core does not call a hosted embedding provider."
     },
     {
       "id": "database.duckdb",
@@ -264,7 +264,7 @@
       "id": "database.kuzu",
       "name": "Kuzu",
       "category": "database",
-      "status": "working_private",
+      "status": "working_optional",
       "default_enabled": false,
       "dependency_type": "embedded_graph",
       "bundled": false,
@@ -272,7 +272,7 @@
       "requires": ["kuzu"],
       "project_url": "https://github.com/kuzudb/kuzu",
       "license": "MIT",
-      "notes": "Working adapter exists in the private CTL tree."
+      "notes": "Implemented by ctl_core.adapters.database.kuzu_index. Builds a rebuildable graph from CTL package records, tags, links, and assets."
     },
     {
       "id": "database.neo4j",
